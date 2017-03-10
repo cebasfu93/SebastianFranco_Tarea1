@@ -53,7 +53,6 @@ int main(int argc, char *argv[]){
       osc[j]=osc_p[j]+vels[j]*delt;
     }
     acc=Newton(osc);
-    #pragma omp parallel for private(j), shared(vels, vels_p)
     for(j=1;j<N-1;j++){
       vels_p[j]=vels[j];
     }
@@ -71,7 +70,6 @@ int main(int argc, char *argv[]){
       fprintf(energias, "%lf %lf %lf %lf \n", E(1, osc, osc_p), E(2, osc, osc_p), E(3,osc, osc_p), i*delt);
     }
 
-    #pragma omp parallel for private(j), shared(osc, osc_p)
     for(j=1;j<N-1;j++){
       osc_p[j]=osc[j];
     }
@@ -80,7 +78,6 @@ int main(int argc, char *argv[]){
 
 void init(double * masas){
   int i;
-  #pragma omp parallel for private(i), shared(masas)
   for (i=0;i<N;i++){
     masas[i]=sin((pi*i)/(N-1));
   }
@@ -91,7 +88,6 @@ double * Newton(double * masas){
   temp=malloc(N*sizeof(double));
   temp[0]=0.0; temp[N-1]=0.0;
 
-  #pragma omp parallel for private(i), shared(masas, temp)
   for(i=1;i<N-1;i++){
     temp[i]=masas[i+1]-2*masas[i]+masas[i-1]+beta*(pow(masas[i+1]-masas[i],2)-pow(masas[i]-masas[i-1],2));
   }
@@ -118,7 +114,6 @@ double * derv(double * masas, double * masas_ant){
   var=malloc(sizeof(double)*N);
   var[0]=0.0;
   var[N-1]=0.0;
-  #pragma omp parallel for private(i), shared(masas, masas_ant, var)
   for(i=1;i<N-1;i++){
     var[i]=(masas[i]-masas_ant[i])/delt;
   }
