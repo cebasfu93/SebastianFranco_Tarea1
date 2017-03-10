@@ -16,7 +16,7 @@ plt.xlabel('Procesadores')
 plt.ylabel('Tiempo (s)')
 plt.title('Tiempo de usuario en funcion de numero de procesadores')
 plt.xlim((0,5))
-plt.plot([1,2,4], times, 'ro', ms=6)
+plt.plot([1,2,4], times, 'r-', ms=6)
 plt.savefig('tiempo.pdf', format='pdf')
 plt.close()
 
